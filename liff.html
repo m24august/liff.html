@@ -28,6 +28,19 @@ label{display:block;font-size:12px;font-weight:600;color:#5b6180;margin:12px 2px
 textarea.inp{resize:vertical}
 .det{background:#fff;border-radius:12px;padding:13px;font-size:13.5px;line-height:1.7}
 .det b{color:#20235f}
+.big{background:#fff6f0;border:1px solid #f5d3bd;border-radius:12px;padding:10px 13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.big .l{font-size:11px;color:#a8541f}.big .n{font-size:20px;font-weight:800;color:#d24e12}
+.blk{background:#fff;border-radius:12px;border:1px solid #e7e9f2;padding:11px 13px;margin-bottom:10px}
+.bt{font-size:11.5px;font-weight:800;color:#20235f;margin-bottom:7px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:12.8px;padding:3px 0;line-height:1.5}
+.row .k{color:#7a8097;white-space:nowrap}.row .v{font-weight:600;text-align:right}
+.cbs{display:flex;gap:8px;margin-top:9px}
+.cb{flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:9px;border-radius:9px;text-decoration:none;display:block}
+.cb.call{background:#dff3e6;color:#1c7a44}.cb.map{background:#e2f0ff;color:#1c5fb0}
+.cbcard{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.cbcard .amt{font-size:15px;font-weight:800;color:#d24e12}
+.cbcard .amt small{font-size:9px;color:#a8541f;font-weight:600;display:block;text-align:right;line-height:1}
+.cbcard .due{font-size:12px;color:#b62c2c;font-weight:700}
 .photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .pho{width:70px;height:70px;border-radius:10px;object-fit:cover;border:1px solid #d7dbe8}
 .addp{width:70px;height:70px;border-radius:10px;background:#eef0f7;border:1px dashed #c3c8dc;display:flex;align-items:center;justify-content:center;font-size:26px;color:#9aa0bd;cursor:pointer}
@@ -62,7 +75,7 @@ textarea.inp{resize:vertical}
   <div id="detailView" class="hide">
     <div class="hd"><span class="back" onclick="showList()">‹ กลับ</span><div class="t" id="dTitle">งาน</div><div class="s" id="dSub">—</div></div>
     <div class="wrap">
-      <div class="det" id="dInfo"></div>
+      <div id="dInfo"></div>
       <label>สถานะการติดตาม</label>
       <select class="inp" id="fStatus">
         <option>รับงานแล้ว</option>
@@ -94,7 +107,14 @@ textarea.inp{resize:vertical}
       <label>ค้าง (งวด)</label><input class="inp" id="sInst" placeholder="เช่น 3">
       <label>ยอดค้าง (บาท)</label><input class="inp" id="sAmount" placeholder="เช่น 8400">
       <label>เบอร์โทร</label><input class="inp" id="sPhone" placeholder="08x-xxx-xxxx">
-      <label>รายละเอียด / เบาะแสที่อยู่</label><textarea class="inp" id="sNote" rows="2" placeholder="ที่อยู่ปลายทาง / ข้อมูลเพิ่มเติม"></textarea>
+      <label>เลขที่สัญญา</label><input class="inp" id="sContract" placeholder="เช่น 0201250227000001">
+      <label>ที่อยู่</label><textarea class="inp" id="sAddress" rows="2" placeholder="บ้านเลขที่ / ตำบล / อำเภอ / จังหวัด"></textarea>
+      <label>รุ่นรถ / สี</label><input class="inp" id="sVehicle" placeholder="เช่น HONDA AFS110 · ดำเทา">
+      <label>เลขตัวถัง</label><input class="inp" id="sChassis" placeholder="เช่น MLHJA144P5291655">
+      <label>งวดที่ค้าง</label><input class="inp" id="sDueNo" placeholder="เช่น 13-16">
+      <label>ค่างวด / งวด (บาท)</label><input class="inp" id="sInstAmt" placeholder="เช่น 1510">
+      <label>ชำระล่าสุด</label><input class="inp" id="sLastPay" placeholder="เช่น 30/06/2026 · 7,482">
+      <label>รายละเอียด / เบาะแสที่อยู่</label><textarea class="inp" id="sNote" rows="2" placeholder="ข้อมูลเพิ่มเติม / นัดหมาย"></textarea>
       <button class="btn" id="sBtn" onclick="submitNewJob()">📨 ส่งงานให้ส่วนกลาง</button>
     </div>
   </div>
@@ -118,6 +138,27 @@ async function boot(){
   }catch(e){ document.body.innerHTML='<div class="empty">โหลดไม่สำเร็จ: '+e+'<br>ตรวจ LIFF_ID / API_URL</div>'; }
 }
 async function loadJobs(){ var r=await api('myJobs'); JOBS=(r.ok&&r.jobs)?r.jobs:[]; renderList(); }
+function fmt(n){ if(n===''||n==null) return '-'; var x=(''+n).replace(/[^0-9.]/g,''); if(x==='') return n; return Number(x).toLocaleString('en-US'); }
+function row(k,v,st){ return v?('<div class="row"><span class="k">'+k+'</span><span class="v"'+(st?(' style="'+st+'"'):'')+'>'+v+'</span></div>'):''; }
+function renderDetail(j){
+  var tel=(''+(j.phone||'')).replace(/[^0-9+]/g,'');
+  var q=encodeURIComponent(j.address||((j.plate||'')+' '+(j.branch||'')));
+  var h='<div class="big"><div><div class="l">ยอดค้าง</div><div class="n">'+fmt(j.amountDue)+'</div></div>'
+    +'<div style="text-align:right"><div class="l">งวดค้าง</div><div style="font-size:15px;font-weight:800;color:#b62c2c">'+(j.instDue||'-')+' งวด</div></div></div>';
+  // ลูกหนี้
+  var b1=row('ชื่อ',j.customer)+row('เลขที่สัญญา',j.contractNo,'font-size:11px')+row('โทร',j.phone,'color:#1c7a44')+row('ที่อยู่',(j.address||'').replace(/\n/g,'<br>'),'text-align:right;font-size:11.5px');
+  if(b1){ h+='<div class="blk"><div class="bt">👤 ลูกหนี้</div>'+b1;
+    var cbs=''; if(tel) cbs+='<a class="cb call" href="tel:'+tel+'">📞 โทร</a>'; if(q) cbs+='<a class="cb map" href="https://maps.google.com/?q='+q+'" target="_blank">🗺️ แผนที่</a>';
+    if(cbs) h+='<div class="cbs">'+cbs+'</div>'; h+='</div>'; }
+  // รถ
+  var b2=row('รุ่น/สี',j.vehicle,'font-size:11.5px')+row('ทะเบียน',j.plate)+row('เลขตัวถัง',j.chassis,'font-size:11px');
+  if(b2) h+='<div class="blk"><div class="bt">🏍️ รถ</div>'+b2+'</div>';
+  // หนี้
+  var b3=row('งวดที่ค้าง',j.dueNo)+row('ค่างวด',j.instAmt?(fmt(j.instAmt)+' /งวด'):'')+row('ยอดค้าง',fmt(j.amountDue))+row('ชำระล่าสุด',j.lastPay);
+  if(b3) h+='<div class="blk"><div class="bt">💳 หนี้</div>'+b3+'</div>';
+  if(j.note) h+='<div class="blk"><div class="bt">📝 โน้ตล่าสุด</div><div style="font-size:12.5px;line-height:1.6">'+j.note+'</div></div>';
+  return h;
+}
 function statusChip(s){
   var map={'เกินกำหนด':'background:#ffe0e0;color:#b62c2c','ติดต่อไม่ได้':'background:#ffe0e0;color:#b62c2c','นัดจ่ายตามกำหนด':'background:#dff3e6;color:#1c7a44','ปิดงาน':'background:#e6e9f5;color:#4a4f83','รอรับงาน':'background:#fff2d6;color:#9a6a00'};
   return '<span class="chip" style="'+(map[s]||'')+'">'+(s||'-')+'</span>';
@@ -130,9 +171,12 @@ function renderList(){
   });
   if(!rows.length){ box.innerHTML='<div class="empty">ยังไม่มีงานในหมวดนี้ 🎉</div>'; return; }
   box.innerHTML=rows.map(function(j){
+    var amt=j.amountDue?('<span class="amt">'+fmt(j.amountDue)+'<small>ยอดค้าง</small></span>'):'';
+    var due=j.instDue?('<span class="due">ค้าง '+j.instDue+' งวด</span>'):'<span></span>';
     return '<div class="card" onclick="openJob(\''+j.jobId+'\')"><div class="top"><div class="ic">💰</div>'
-      +'<div><div class="nm">'+(j.customer||'-')+'</div><div class="sub">สาขา '+(j.branch||'-')+(j.plate?(' · '+j.plate):'')+'</div></div></div>'
-      +'<div class="meta">'+statusChip(j.status)+'<span class="due">'+(j.dueDate?('ดิว '+j.dueDate):'')+'</span></div></div>';
+      +'<div><div class="nm">'+(j.customer||'-')+'</div><div class="sub">'+(j.plate?(j.plate+' · '):'')+'สาขา '+(j.branch||'-')+'</div></div>'
+      +'<div style="margin-left:auto">'+statusChip(j.status)+'</div></div>'
+      +'<div class="cbcard">'+due+amt+'</div></div>';
   }).join('');
 }
 function openJob(id){
@@ -140,7 +184,7 @@ function openJob(id){
   PHOTOS=[]; GPS=null;
   document.getElementById('dTitle').textContent='💰 '+(CUR.type||'ติดตามหนี้');
   document.getElementById('dSub').textContent=(CUR.customer||'')+' · สาขา '+(CUR.branch||'');
-  document.getElementById('dInfo').innerHTML='<b>ทะเบียน:</b> '+(CUR.plate||'-')+'<br><b>ค้าง:</b> '+(CUR.instDue||'-')+' งวด · '+(CUR.amountDue||'-')+' บาท<br><b>โทร:</b> '+(CUR.phone||'-')+(CUR.note?('<br><b>โน้ตล่าสุด:</b> '+CUR.note):'');
+  document.getElementById('dInfo').innerHTML=renderDetail(CUR);
   document.getElementById('fNote').value='';
   document.getElementById('photoBox').innerHTML='<div class="addp" onclick="document.getElementById(\'fPhoto\').click()">＋</div>';
   document.getElementById('gpsBox').className='gps empty'; document.getElementById('gpsBox').textContent='📍 แตะเพื่อปักหมุดพิกัด';
@@ -186,10 +230,11 @@ async function submitNewJob(){
   if(!cust){ toast('กรอกชื่อลูกค้าก่อน'); return; }
   var btn=document.getElementById('sBtn'); btn.textContent='กำลังส่ง...'; btn.disabled=true;
   var g=function(id){return document.getElementById(id).value;};
-  var body={ type:g('sType'), customer:cust, plate:g('sPlate'), branch:g('sBranch'), instDue:g('sInst'), amountDue:g('sAmount'), phone:g('sPhone'), note:g('sNote') };
+  var body={ type:g('sType'), customer:cust, plate:g('sPlate'), branch:g('sBranch'), instDue:g('sInst'), amountDue:g('sAmount'), phone:g('sPhone'), note:g('sNote'),
+             contractNo:g('sContract'), address:g('sAddress'), vehicle:g('sVehicle'), chassis:g('sChassis'), dueNo:g('sDueNo'), instAmt:g('sInstAmt'), lastPay:g('sLastPay') };
   var r=await api('submitJob',body);
   btn.textContent='📨 ส่งงานให้ส่วนกลาง'; btn.disabled=false;
-  if(r.ok){ toast('ส่งงานแล้ว ✔ '+(r.jobId||'')); ['sCustomer','sPlate','sBranch','sInst','sAmount','sPhone','sNote'].forEach(function(id){document.getElementById(id).value='';}); showList(); }
+  if(r.ok){ toast('ส่งงานแล้ว ✔ '+(r.jobId||'')); ['sCustomer','sPlate','sBranch','sInst','sAmount','sPhone','sNote','sContract','sAddress','sVehicle','sChassis','sDueNo','sInstAmt','sLastPay'].forEach(function(id){document.getElementById(id).value='';}); showList(); }
   else toast('ส่งไม่สำเร็จ: '+(r.error||''));
 }
 document.querySelectorAll('.tab').forEach(function(t){ t.onclick=function(){
