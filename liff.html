@@ -56,6 +56,7 @@ textarea.inp{resize:vertical}
       <div class="tab" data-f="hot">🔴 เกินกำหนด</div>
     </div>
     <div class="wrap" id="list"></div>
+    <button id="addBtn" onclick="openSubmit()" style="position:fixed;bottom:18px;right:18px;z-index:50;background:#20235f;color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;font-size:14px;box-shadow:0 8px 20px rgba(20,25,60,.35);cursor:pointer">➕ ส่งงานให้ส่วนกลาง</button>
   </div>
 
   <div id="detailView" class="hide">
@@ -80,6 +81,21 @@ textarea.inp{resize:vertical}
       <label>เช็คอินพิกัด</label>
       <div class="gps empty" id="gpsBox" onclick="getGps()">📍 แตะเพื่อปักหมุดพิกัด</div>
       <button class="btn" id="submitBtn" onclick="submitUpdate()">✓ ส่งอัปเดต</button>
+    </div>
+  </div>
+  <div id="submitView" class="hide">
+    <div class="hd"><span class="back" onclick="showList()">‹ กลับ</span><div class="t">➕ ส่งงานให้ส่วนกลาง</div><div class="s">พันธมิตรส่งงาน “รับเข้า”</div></div>
+    <div class="wrap">
+      <label>ประเภทงาน</label>
+      <select class="inp" id="sType"><option>ติดตามหนี้</option><option>เช็คก่อนขาย</option><option>ถ่ายภาพพิกัด/ยึดทรัพย์</option></select>
+      <label>ชื่อลูกค้า *</label><input class="inp" id="sCustomer" placeholder="ชื่อ-นามสกุล">
+      <label>ทะเบียนรถ</label><input class="inp" id="sPlate" placeholder="เช่น 1กข 234">
+      <label>จังหวัด/พื้นที่</label><input class="inp" id="sBranch" placeholder="เช่น ตรัง">
+      <label>ค้าง (งวด)</label><input class="inp" id="sInst" placeholder="เช่น 3">
+      <label>ยอดค้าง (บาท)</label><input class="inp" id="sAmount" placeholder="เช่น 8400">
+      <label>เบอร์โทร</label><input class="inp" id="sPhone" placeholder="08x-xxx-xxxx">
+      <label>รายละเอียด / เบาะแสที่อยู่</label><textarea class="inp" id="sNote" rows="2" placeholder="ที่อยู่ปลายทาง / ข้อมูลเพิ่มเติม"></textarea>
+      <button class="btn" id="sBtn" onclick="submitNewJob()">📨 ส่งงานให้ส่วนกลาง</button>
     </div>
   </div>
 </div>
@@ -130,7 +146,7 @@ function openJob(id){
   document.getElementById('gpsBox').className='gps empty'; document.getElementById('gpsBox').textContent='📍 แตะเพื่อปักหมุดพิกัด';
   document.getElementById('listView').classList.add('hide'); document.getElementById('detailView').classList.remove('hide'); window.scrollTo(0,0);
 }
-function showList(){ document.getElementById('detailView').classList.add('hide'); document.getElementById('listView').classList.remove('hide'); }
+function showList(){ document.getElementById('detailView').classList.add('hide'); var sv=document.getElementById('submitView'); if(sv) sv.classList.add('hide'); document.getElementById('listView').classList.remove('hide'); }
 function addPhoto(ev){
   var file=ev.target.files[0]; if(!file) return;
   var reader=new FileReader();
@@ -163,6 +179,18 @@ async function submitUpdate(){
   var r=await api('updateJob',body);
   btn.textContent='✓ ส่งอัปเดต'; btn.disabled=false;
   if(r.ok){ toast('บันทึกแล้ว ✔'); await loadJobs(); showList(); } else toast('ส่งไม่สำเร็จ: '+(r.error||''));
+}
+function openSubmit(){ document.getElementById('listView').classList.add('hide'); document.getElementById('submitView').classList.remove('hide'); window.scrollTo(0,0); }
+async function submitNewJob(){
+  var cust=document.getElementById('sCustomer').value.trim();
+  if(!cust){ toast('กรอกชื่อลูกค้าก่อน'); return; }
+  var btn=document.getElementById('sBtn'); btn.textContent='กำลังส่ง...'; btn.disabled=true;
+  var g=function(id){return document.getElementById(id).value;};
+  var body={ type:g('sType'), customer:cust, plate:g('sPlate'), branch:g('sBranch'), instDue:g('sInst'), amountDue:g('sAmount'), phone:g('sPhone'), note:g('sNote') };
+  var r=await api('submitJob',body);
+  btn.textContent='📨 ส่งงานให้ส่วนกลาง'; btn.disabled=false;
+  if(r.ok){ toast('ส่งงานแล้ว ✔ '+(r.jobId||'')); ['sCustomer','sPlate','sBranch','sInst','sAmount','sPhone','sNote'].forEach(function(id){document.getElementById(id).value='';}); showList(); }
+  else toast('ส่งไม่สำเร็จ: '+(r.error||''));
 }
 document.querySelectorAll('.tab').forEach(function(t){ t.onclick=function(){
   document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');}); t.classList.add('on'); FILTER=t.dataset.f; renderList();
