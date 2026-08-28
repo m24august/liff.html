@@ -149,7 +149,13 @@ function fmtT(v){ try{ var d=new Date(v); if(isNaN(d)) return String(v).slice(0,
 async function openJob(id){
   var j=JOBS.filter(function(x){return String(x.jobId)===String(id);})[0]; if(!j) return;
   document.getElementById('mTitle').textContent=(j.customer||id);
-  document.getElementById('mInfo').innerHTML=(j.type||'')+' · สาขา '+(j.branch||'-')+' · '+(j.assigneeName||j.assigneeUserId||'-')+'<br>สถานะล่าสุด: <b>'+(j.status||'-')+'</b>';
+  var L=function(k,v){return v?('<br><span style="color:#8890ad">'+k+':</span> '+v):'';};
+  var amt=j.amountDue?(Number((''+j.amountDue).replace(/[^0-9.]/g,'')||0).toLocaleString('en-US')):'';
+  document.getElementById('mInfo').innerHTML=(j.type||'')+' · สาขา '+(j.branch||'-')+' · '+(j.assigneeName||j.assigneeUserId||'-')
+    +'<br>สถานะล่าสุด: <b>'+(j.status||'-')+'</b>'
+    +L('ยอดค้าง',amt+(j.instDue?(' ('+j.instDue+' งวด)'):''))+L('ทะเบียน',j.plate)+L('โทร',j.phone)
+    +L('เลขที่สัญญา',j.contractNo)+L('ที่อยู่',j.address)+L('รถ',j.vehicle)+L('เลขตัวถัง',j.chassis)
+    +L('งวดที่ค้าง',j.dueNo)+L('ค่างวด',j.instAmt)+L('ชำระล่าสุด',j.lastPay);
   document.getElementById('mTl').innerHTML='<div class="empty">กำลังโหลด...</div>';
   document.getElementById('modal').classList.remove('hide');
   var r=await api('jobLog',{jobId:id}); var log=(r.ok&&r.log)?r.log:[];
