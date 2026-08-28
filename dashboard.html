@@ -57,6 +57,8 @@ body{font-family:'Segoe UI','Leelawadee UI',Tahoma,sans-serif;background:#eef1f5
     <div class="kpis" id="kpis"></div>
     <div class="tabs" id="tabs">
       <div class="tab on" data-f="all">ทั้งหมด</div>
+      <div class="tab" data-f="out">↗️ ส่งออก</div>
+      <div class="tab" data-f="in">↘️ รับเข้า</div>
       <div class="tab" data-f="active">🔵 กำลังทำ</div>
       <div class="tab" data-f="hot">🔴 ต้องเร่ง</div>
       <div class="tab" data-f="done">✔️ ปิดแล้ว</div>
@@ -121,6 +123,8 @@ function renderList(){
     if(FILTER==='active') return j.status && !isClosed(j.status);
     if(FILTER==='hot') return isHot(j.status);
     if(FILTER==='done') return isClosed(j.status);
+    if(FILTER==='out') return j.direction==='ส่งออก';
+    if(FILTER==='in') return j.direction==='รับเข้า';
     return true;
   });
   document.getElementById('cnt').textContent=rows.length;
@@ -129,7 +133,7 @@ function renderList(){
   box.innerHTML=rows.map(function(j){
     return '<div class="card '+typeCls(j.type)+'" onclick="openJob(\''+j.jobId+'\')">'
       +'<div class="r1"><div><div class="nm">'+typeIcon(j.type)+' '+(j.customer||'-')+'</div>'
-      +'<div class="sub">'+(j.type||'')+' · สาขา '+(j.branch||'-')+'</div></div>'
+      +'<div class="sub">'+((j.direction==='รับเข้า')?'↘️ รับเข้า':'↗️ ส่งออก')+' · '+(j.type||'')+' · '+(j.branch||'-')+'</div></div>'
       +'<span class="chip '+chipCls(j.status)+'">'+(j.status||'รอรับงาน')+'</span></div>'
       +'<div class="who">👤 '+(j.assigneeName||j.assigneeUserId||'ยังไม่มอบหมาย')+(j.updatedAt?(' · '+fmtT(j.updatedAt)):'')+'</div></div>';
   }).join('');
