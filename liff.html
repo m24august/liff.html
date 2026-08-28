@@ -3,188 +3,168 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>งานของฉัน · โมโต24</title>
+<title>ศูนย์ควบคุมงาน · โมโต24</title>
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI','Leelawadee UI',Tahoma,sans-serif;background:#f6f7fb;color:#1c2333}
-.hd{background:#20235f;color:#fff;padding:14px 16px}
-.hd .t{font-size:17px;font-weight:700}
-.hd .s{font-size:12px;color:#b9bde6;margin-top:2px}
-.tabs{display:flex;gap:6px;padding:10px 12px;background:#fff;border-bottom:1px solid #eceef5;position:sticky;top:0;z-index:5}
-.tab{flex:1;text-align:center;font-size:12.5px;font-weight:600;padding:8px 0;border-radius:9px;background:#eef0f7;color:#5b6180;cursor:pointer}
-.tab.on{background:#20235f;color:#fff}
+body{font-family:'Segoe UI','Leelawadee UI',Tahoma,sans-serif;background:#eef1f5;color:#1c2333}
+.hd{background:#20235f;color:#fff;padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
+.hd .t{font-size:16px;font-weight:700}.hd .s{font-size:11px;color:#b9bde6}
+.rf{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:16px;padding:6px 12px;font-size:12px;font-weight:700}
 .wrap{padding:12px}
-.card{background:#fff;border-radius:14px;padding:12px 13px;margin-bottom:10px;border:1px solid #e7e9f2;cursor:pointer}
-.card .top{display:flex;align-items:center;gap:9px}
-.ic{width:34px;height:34px;border-radius:9px;background:#fdecdf;display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 34px}
-.nm{font-size:14px;font-weight:700}
-.sub{font-size:12px;color:#7a8097;margin-top:1px}
-.meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-.chip{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:#eef0f7;color:#4a4f83}
-.due{font-size:11px;color:#9098ad}
-label{display:block;font-size:12px;font-weight:600;color:#5b6180;margin:12px 2px 5px}
-.inp{width:100%;border:1px solid #d7dbe8;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;background:#fff}
-textarea.inp{resize:vertical}
-.det{background:#fff;border-radius:12px;padding:13px;font-size:13.5px;line-height:1.7}
-.det b{color:#20235f}
-.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.pho{width:70px;height:70px;border-radius:10px;object-fit:cover;border:1px solid #d7dbe8}
-.addp{width:70px;height:70px;border-radius:10px;background:#eef0f7;border:1px dashed #c3c8dc;display:flex;align-items:center;justify-content:center;font-size:26px;color:#9aa0bd;cursor:pointer}
-.gps{display:flex;align-items:center;gap:8px;margin-top:6px;background:#eefaf2;border:1px solid #bfe6cf;border-radius:10px;padding:9px 11px;font-size:12.5px;color:#1c7a44;font-weight:600;cursor:pointer}
-.gps.empty{background:#fff5e6;border-color:#f0d59a;color:#9a6a00}
-.btn{display:block;width:100%;text-align:center;background:#F26522;color:#fff;font-weight:700;font-size:15px;padding:14px;border-radius:12px;margin-top:16px;border:none;cursor:pointer}
-.btn.sec{background:#eef0f7;color:#20235f}
-.back{font-size:13px;color:#20235f;font-weight:600;padding:4px 0;cursor:pointer;display:inline-block;margin-bottom:6px}
-.empty{text-align:center;color:#9098ad;font-size:13px;padding:40px 20px}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#20235f;color:#fff;font-size:13px;padding:10px 18px;border-radius:22px;opacity:0;transition:.25s;z-index:20}
-.toast.show{opacity:1}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.kpi{background:#fff;border-radius:11px;padding:10px 8px;text-align:center;border:1px solid #eceef5}
+.kpi .n{font-size:22px;font-weight:800;line-height:1.1}.kpi .l{font-size:10px;color:#7a8097;margin-top:2px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.tab{white-space:nowrap;font-size:12px;font-weight:600;padding:6px 12px;border-radius:16px;background:#e7e9f2;color:#5b6180}
+.tab.on{background:#20235f;color:#fff}
+.sec{font-size:12px;font-weight:700;color:#20235f;margin:14px 2px 8px}
+.card{background:#fff;border-radius:11px;padding:10px 12px;margin-bottom:8px;border:1px solid #e7e9f2;border-left:4px solid #F26522;cursor:pointer}
+.card.check{border-left-color:#2f80ed}.card.photo{border-left-color:#1c7a44}
+.r1{display:flex;justify-content:space-between;align-items:center}
+.nm{font-size:14px;font-weight:700}.sub{font-size:11px;color:#7a8097;margin-top:1px}
+.chip{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.c-go{background:#dff3e6;color:#1c7a44}.c-hot{background:#ffe0e0;color:#b62c2c}.c-wait{background:#fff2d6;color:#9a6a00}.c-done{background:#e6e9f5;color:#4a4f83}
+.who{font-size:11px;color:#5b6180;margin-top:5px}
+.feed{background:#fff;border-radius:11px;border:1px solid #eceef5;padding:6px 12px}
+.fi{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #f0f1f7;font-size:12px}
+.fi:last-child{border:none}
+.ft{font-size:10px;color:#a2a8be;white-space:nowrap;margin-left:auto}
+.empty{text-align:center;color:#9098ad;font-size:13px;padding:30px}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(20,25,60,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.ov.hide{display:none}
+.sheet{background:#fff;width:100%;max-width:520px;border-radius:16px 16px 0 0;padding:16px;max-height:80vh;overflow:auto}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sh .t{font-size:15px;font-weight:800;color:#20235f}
+.x{font-size:20px;color:#7a8097;background:none;border:none}
+.tl{border-left:2px solid #e2e5f0;padding-left:12px;margin-left:4px}
+.tl .it{margin-bottom:12px;position:relative}
+.tl .it:before{content:'';position:absolute;left:-17px;top:3px;width:9px;height:9px;border-radius:50%;background:#F26522}
+.tl .dt{font-size:11px;color:#9098ad}.tl .tx{font-size:13px;margin-top:2px}
+.tl .who2{font-size:11px;color:#5b6180}
 .hide{display:none}
 </style>
 </head>
 <body>
-
-<!-- ====== CONFIG: ใส่ 2 ค่านี้ ====== -->
 <script>
-  var LIFF_ID = '2011293783-GAabvAXy';
+  var LIFF_ID = 'ใส่_LIFF_ID_ของDashboard';
   var API_URL = 'https://script.google.com/macros/s/AKfycbxe_1a5j-TuNvulJ6CO9tD30uGRPLoDgPRPJqxfmpUb8MrpJYnt5RRW9oeEXZ3vtFjQRg/exec';
 </script>
 
 <div id="app" class="hide">
-  <!-- LIST VIEW -->
-  <div id="listView">
-    <div class="hd"><div class="t">📋 งานของฉัน</div><div class="s" id="who">—</div></div>
-    <div class="tabs">
+  <div class="hd"><div><div class="t">🗂️ ศูนย์ควบคุมงาน</div><div class="s" id="who">—</div></div><button class="rf" onclick="loadAll()">↻ รีเฟรช</button></div>
+  <div class="wrap">
+    <div class="kpis" id="kpis"></div>
+    <div class="tabs" id="tabs">
       <div class="tab on" data-f="all">ทั้งหมด</div>
-      <div class="tab" data-f="open">🔵 ยังไม่ปิด</div>
-      <div class="tab" data-f="hot">🔴 เกินกำหนด</div>
+      <div class="tab" data-f="active">🔵 กำลังทำ</div>
+      <div class="tab" data-f="hot">🔴 ต้องเร่ง</div>
+      <div class="tab" data-f="done">✔️ ปิดแล้ว</div>
     </div>
-    <div class="wrap" id="list"></div>
-  </div>
-
-  <!-- DETAIL VIEW -->
-  <div id="detailView" class="hide">
-    <div class="hd"><span class="back" onclick="showList()">‹ กลับ</span><div class="t" id="dTitle">งาน</div><div class="s" id="dSub">—</div></div>
-    <div class="wrap">
-      <div class="det" id="dInfo"></div>
-      <label>สถานะการติดตาม</label>
-      <select class="inp" id="fStatus">
-        <option>รับงานแล้ว</option>
-        <option>นัดจ่ายตามกำหนด</option>
-        <option>จ่ายแล้วบางส่วน</option>
-        <option>ติดต่อไม่ได้</option>
-        <option>ยึดรถ</option>
-        <option>คืนรถ</option>
-        <option>ปิดงาน</option>
-      </select>
-      <label>บันทึกเพิ่มเติม</label>
-      <textarea class="inp" id="fNote" rows="2" placeholder="เช่น ลูกค้านัดจ่าย 30 ส.ค."></textarea>
-      <label>แนบรูป (สลิป / รถ / สถานที่)</label>
-      <div class="photos" id="photoBox"><div class="addp" onclick="document.getElementById('fPhoto').click()">＋</div></div>
-      <input type="file" id="fPhoto" accept="image/*" capture="environment" class="hide" onchange="addPhoto(event)">
-      <label>เช็คอินพิกัด</label>
-      <div class="gps empty" id="gpsBox" onclick="getGps()">📍 แตะเพื่อปักหมุดพิกัด</div>
-      <button class="btn" id="submitBtn" onclick="submitUpdate()">✓ ส่งอัปเดต</button>
-    </div>
+    <div class="sec">📋 งานทั้งหมด (<span id="cnt">0</span>)</div>
+    <div id="list"></div>
+    <div class="sec">🔔 อัปเดตล่าสุด</div>
+    <div class="feed" id="feed"></div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="ov hide" id="modal">
+  <div class="sheet">
+    <div class="sh"><span class="t" id="mTitle">ไทม์ไลน์งาน</span><button class="x" onclick="closeModal()">✕</button></div>
+    <div id="mInfo" style="font-size:13px;color:#5b6180;margin-bottom:10px"></div>
+    <div class="tl" id="mTl"></div>
+  </div>
+</div>
+
+<div class="empty hide" id="deny">เฉพาะแอดมินเท่านั้น 🔒</div>
 
 <script>
-var TOKEN='', ME={}, JOBS=[], CUR=null, PHOTOS=[], GPS=null, FILTER='all';
-
-function toast(t){ var el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); setTimeout(function(){el.classList.remove('show');},2200); }
-function api(action,data){
-  data=data||{}; data.action=action; data.accessToken=TOKEN;
-  return fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}).then(function(r){return r.json();});
-}
-
+var JOBS=[], FILTER='all';
+function api(action,data){ data=data||{}; data.action=action; data.accessToken=TOKEN;
+  return fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}).then(function(r){return r.json();}); }
+var TOKEN='';
 async function boot(){
   try{
     await liff.init({liffId:LIFF_ID});
     if(!liff.isLoggedIn()){ liff.login(); return; }
     TOKEN=liff.getAccessToken();
-    document.getElementById('app').classList.remove('hide');
     var w=await api('whoami');
-    if(!w.ok){ toast('เข้าสู่ระบบไม่สำเร็จ'); return; }
-    ME=w; document.getElementById('who').textContent=w.name+(w.admin?' (แอดมิน)':'');
-    loadJobs();
-  }catch(e){ document.body.innerHTML='<div class="empty">โหลดไม่สำเร็จ: '+e+'<br>ตรวจ LIFF_ID / API_URL</div>'; }
+    if(!w.ok){ document.body.innerHTML='<div class="empty">เข้าสู่ระบบไม่สำเร็จ</div>'; return; }
+    if(!w.admin){ document.getElementById('deny').classList.remove('hide'); return; }
+    document.getElementById('app').classList.remove('hide');
+    document.getElementById('who').textContent=w.name+' · ส่วนกลาง';
+    loadAll();
+  }catch(e){ document.body.innerHTML='<div class="empty">โหลดไม่สำเร็จ: '+e+'</div>'; }
 }
-async function loadJobs(){
-  var r=await api('myJobs'); JOBS=(r.ok&&r.jobs)?r.jobs:[]; renderList();
+function isClosed(s){ return s && String(s).indexOf('ปิด')>=0; }
+function isHot(s){ return /เกิน|ติดต่อไม่ได้/.test(s||''); }
+function chipCls(s){ if(isClosed(s))return'c-done'; if(isHot(s))return'c-hot'; if(/นัด|จ่าย|ผ่าน/.test(s||''))return'c-go'; return'c-wait'; }
+function typeCls(t){ if(/เช็ค/.test(t||''))return'check'; if(/ถ่ายภาพ|พิกัด|ยึดทรัพย์/.test(t||''))return'photo'; return''; }
+function typeIcon(t){ if(/เช็ค/.test(t||''))return'🔍'; if(/ถ่ายภาพ|พิกัด|ยึดทรัพย์/.test(t||''))return'📸'; return'💰'; }
+
+async function loadAll(){
+  var r=await api('listJobs'); JOBS=(r.ok&&r.jobs)?r.jobs:[];
+  renderKpis(); renderList();
+  var f=await api('logFeed',{limit:40}); renderFeed((f.ok&&f.log)?f.log:[]);
 }
-function statusChip(s){
-  var map={'เกินกำหนด':'background:#ffe0e0;color:#b62c2c','ติดต่อไม่ได้':'background:#ffe0e0;color:#b62c2c','นัดจ่ายตามกำหนด':'background:#dff3e6;color:#1c7a44','ปิดงาน':'background:#e6e9f5;color:#4a4f83','รอรับงาน':'background:#fff2d6;color:#9a6a00'};
-  return '<span class="chip" style="'+(map[s]||'')+'">'+(s||'-')+'</span>';
+function renderKpis(){
+  var total=JOBS.length,
+      active=JOBS.filter(function(j){return j.status && !isClosed(j.status);}).length,
+      hot=JOBS.filter(function(j){return isHot(j.status);}).length,
+      done=JOBS.filter(function(j){return isClosed(j.status);}).length;
+  document.getElementById('kpis').innerHTML=
+    '<div class="kpi"><div class="n" style="color:#20235f">'+total+'</div><div class="l">ทั้งหมด</div></div>'+
+    '<div class="kpi"><div class="n" style="color:#1c5fb0">'+active+'</div><div class="l">กำลังทำ</div></div>'+
+    '<div class="kpi"><div class="n" style="color:#c0392b">'+hot+'</div><div class="l">ต้องเร่ง</div></div>'+
+    '<div class="kpi"><div class="n" style="color:#1c7a44">'+done+'</div><div class="l">ปิดแล้ว</div></div>';
 }
 function renderList(){
-  var box=document.getElementById('list'), rows=JOBS.filter(function(j){
-    if(FILTER==='open') return j.status!=='ปิดงาน';
-    if(FILTER==='hot')  return String(j.status).indexOf('เกิน')>=0||j.status==='ติดต่อไม่ได้';
+  var rows=JOBS.filter(function(j){
+    if(FILTER==='active') return j.status && !isClosed(j.status);
+    if(FILTER==='hot') return isHot(j.status);
+    if(FILTER==='done') return isClosed(j.status);
     return true;
   });
-  if(!rows.length){ box.innerHTML='<div class="empty">ยังไม่มีงานในหมวดนี้ 🎉</div>'; return; }
+  document.getElementById('cnt').textContent=rows.length;
+  var box=document.getElementById('list');
+  if(!rows.length){ box.innerHTML='<div class="empty">ไม่มีงานในหมวดนี้</div>'; return; }
   box.innerHTML=rows.map(function(j){
-    return '<div class="card" onclick="openJob(\''+j.jobId+'\')"><div class="top"><div class="ic">💰</div>'
-      +'<div><div class="nm">'+(j.customer||'-')+'</div><div class="sub">สาขา '+(j.branch||'-')+(j.plate?(' · '+j.plate):'')+'</div></div></div>'
-      +'<div class="meta">'+statusChip(j.status)+'<span class="due">'+(j.dueDate?('ดิว '+j.dueDate):'')+'</span></div></div>';
+    return '<div class="card '+typeCls(j.type)+'" onclick="openJob(\''+j.jobId+'\')">'
+      +'<div class="r1"><div><div class="nm">'+typeIcon(j.type)+' '+(j.customer||'-')+'</div>'
+      +'<div class="sub">'+(j.type||'')+' · สาขา '+(j.branch||'-')+'</div></div>'
+      +'<span class="chip '+chipCls(j.status)+'">'+(j.status||'รอรับงาน')+'</span></div>'
+      +'<div class="who">👤 '+(j.assigneeName||j.assigneeUserId||'ยังไม่มอบหมาย')+(j.updatedAt?(' · '+fmtT(j.updatedAt)):'')+'</div></div>';
   }).join('');
 }
-function openJob(id){
-  CUR=JOBS.filter(function(j){return String(j.jobId)===String(id);})[0]; if(!CUR) return;
-  PHOTOS=[]; GPS=null;
-  document.getElementById('dTitle').textContent='💰 '+(CUR.type||'ติดตามหนี้');
-  document.getElementById('dSub').textContent=(CUR.customer||'')+' · สาขา '+(CUR.branch||'');
-  document.getElementById('dInfo').innerHTML='<b>ทะเบียน:</b> '+(CUR.plate||'-')+'<br><b>ค้าง:</b> '+(CUR.instDue||'-')+' งวด · '+(CUR.amountDue||'-')+' บาท<br><b>โทร:</b> '+(CUR.phone||'-')+(CUR.note?('<br><b>โน้ตล่าสุด:</b> '+CUR.note):'');
-  document.getElementById('fStatus').value=CUR.status&&document.querySelector('#fStatus [value]')?CUR.status:'รับงานแล้ว';
-  document.getElementById('fNote').value='';
-  document.getElementById('photoBox').innerHTML='<div class="addp" onclick="document.getElementById(\'fPhoto\').click()">＋</div>';
-  document.getElementById('gpsBox').className='gps empty'; document.getElementById('gpsBox').textContent='📍 แตะเพื่อปักหมุดพิกัด';
-  document.getElementById('listView').classList.add('hide'); document.getElementById('detailView').classList.remove('hide'); window.scrollTo(0,0);
+function renderFeed(log){
+  var box=document.getElementById('feed');
+  if(!log.length){ box.innerHTML='<div class="empty">ยังไม่มีอัปเดต</div>'; return; }
+  box.innerHTML=log.slice(0,20).map(function(l){
+    return '<div class="fi"><b>'+(l.actorName||'-')+'</b> → '+(l.jobId||'')+' <span class="chip '+chipCls(l.status)+'">'+(l.status||l.action||'')+'</span><span class="ft">'+fmtT(l.time)+'</span></div>';
+  }).join('');
 }
-function showList(){ document.getElementById('detailView').classList.add('hide'); document.getElementById('listView').classList.remove('hide'); }
+function fmtT(v){ try{ var d=new Date(v); if(isNaN(d)) return String(v).slice(0,16); return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }catch(e){ return ''; } }
 
-function addPhoto(ev){
-  var file=ev.target.files[0]; if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      var max=1000, sc=Math.min(1,max/Math.max(img.width,img.height));
-      var c=document.createElement('canvas'); c.width=img.width*sc; c.height=img.height*sc;
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      var d=c.toDataURL('image/jpeg',0.75); PHOTOS.push(d);
-      var im=document.createElement('img'); im.src=d; im.className='pho';
-      document.getElementById('photoBox').insertBefore(im, document.querySelector('#photoBox .addp'));
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file); ev.target.value='';
+async function openJob(id){
+  var j=JOBS.filter(function(x){return String(x.jobId)===String(id);})[0]; if(!j) return;
+  document.getElementById('mTitle').textContent=(j.customer||id);
+  document.getElementById('mInfo').innerHTML=(j.type||'')+' · สาขา '+(j.branch||'-')+' · '+(j.assigneeName||j.assigneeUserId||'-')+'<br>สถานะล่าสุด: <b>'+(j.status||'-')+'</b>';
+  document.getElementById('mTl').innerHTML='<div class="empty">กำลังโหลด...</div>';
+  document.getElementById('modal').classList.remove('hide');
+  var r=await api('jobLog',{jobId:id}); var log=(r.ok&&r.log)?r.log:[];
+  if(!log.length){ document.getElementById('mTl').innerHTML='<div class="empty">ยังไม่มีประวัติอัปเดต</div>'; return; }
+  document.getElementById('mTl').innerHTML=log.map(function(l){
+    return '<div class="it"><div class="dt">'+fmtT(l.time)+'</div>'
+      +'<div class="tx"><b>'+(l.status||l.action||'')+'</b>'+(l.note?(' · '+l.note):'')+'</div>'
+      +'<div class="who2">👤 '+(l.actorName||'')+(l.lat?(' · 📍'+l.lat+','+l.lng):'')+(l.photos?(' · 📷'+String(l.photos).split(',').filter(String).length):'')+'</div></div>';
+  }).join('');
 }
-function getGps(){
-  if(!navigator.geolocation){ toast('อุปกรณ์ไม่รองรับ GPS'); return; }
-  var box=document.getElementById('gpsBox'); box.textContent='⏳ กำลังหาพิกัด...';
-  navigator.geolocation.getCurrentPosition(function(p){
-    GPS={lat:p.coords.latitude.toFixed(6), lng:p.coords.longitude.toFixed(6)};
-    box.className='gps'; box.textContent='📍 ปักหมุดแล้ว · '+GPS.lat+', '+GPS.lng;
-  },function(){ box.className='gps empty'; box.textContent='📍 แตะเพื่อปักหมุด (ไม่อนุญาตตำแหน่ง)'; },{enableHighAccuracy:true,timeout:8000});
-}
-async function submitUpdate(){
-  var btn=document.getElementById('submitBtn'); btn.textContent='กำลังส่ง...'; btn.disabled=true;
-  var body={ jobId:CUR.jobId, status:document.getElementById('fStatus').value, note:document.getElementById('fNote').value, photosB64:PHOTOS };
-  if(GPS){ body.lat=GPS.lat; body.lng=GPS.lng; }
-  var r=await api('updateJob',body);
-  btn.textContent='✓ ส่งอัปเดต'; btn.disabled=false;
-  if(r.ok){ toast('บันทึกแล้ว ✔'); await loadJobs(); showList(); }
-  else toast('ส่งไม่สำเร็จ: '+(r.error||''));
-}
+function closeModal(){ document.getElementById('modal').classList.add('hide'); }
 
 document.querySelectorAll('.tab').forEach(function(t){ t.onclick=function(){
   document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');}); t.classList.add('on'); FILTER=t.dataset.f; renderList();
 };});
-
 boot();
 </script>
 </body>
